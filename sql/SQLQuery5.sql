@@ -1,4 +1,5 @@
-drop database bancoDb
+use hiperalmacen
+drop database BancoDB
 create database bancoDb
 use BancoDB
 CREATE TABLE [Cuenta] (
@@ -9,3 +10,15 @@ CREATE TABLE [Cuenta] (
       );
 INSERT INTO cuenta values (1,'Richard',100)
 select * from cuenta
+
+
+SELECT sqltext.TEXT,
+req.session_id,
+req.status,
+req.command, db_name(req.database_id) as db_name,
+req.cpu_time,
+req.total_elapsed_time
+FROM sys.dm_exec_requests req
+CROSS APPLY sys.dm_exec_sql_text(sql_handle) AS sqltext
+WHERE req.status = 'running'
+ORDER BY total_elapsed_time DESC

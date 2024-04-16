@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using transaccionesBancarias;
 
@@ -10,9 +11,11 @@ using transaccionesBancarias;
 namespace transaccionesBancarias.Migrations
 {
     [DbContext(typeof(TransaccionesContext))]
-    partial class TransaccionesContextModelSnapshot : ModelSnapshot
+    [Migration("20240416161029_AddColumnBalance")]
+    partial class AddColumnBalance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,10 +32,6 @@ namespace transaccionesBancarias.Migrations
                         .HasColumnName("account_number");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountNumber"));
-
-                    b.Property<int>("Balance")
-                        .HasColumnType("int")
-                        .HasColumnName("balance");
 
                     b.Property<int>("InitialBalance")
                         .HasColumnType("int")
@@ -52,7 +51,6 @@ namespace transaccionesBancarias.Migrations
                         new
                         {
                             AccountNumber = 1,
-                            Balance = 0,
                             InitialBalance = 1000,
                             OwnerName = "Richard"
                         });

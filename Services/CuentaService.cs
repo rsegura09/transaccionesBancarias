@@ -1,4 +1,5 @@
 ﻿using transaccionesBancarias.Models;
+using transaccionesBancarias.Models.Request;
 
 namespace transaccionesBancarias.Services
 {
@@ -6,6 +7,7 @@ namespace transaccionesBancarias.Services
     {
         IEnumerable<Cuenta> Get();
         Task Save(Cuenta cuenta);
+        Task UpdateBalance(int account_number, CuentaAmount cuenta);
     }
     public class CuentaService : ICuentaService
     {
@@ -24,6 +26,17 @@ namespace transaccionesBancarias.Services
         {
             context.Cuentas.Add(cuenta);
             await context.SaveChangesAsync();
+        }
+
+        public async Task UpdateBalance (int account_number, CuentaAmount cuenta)
+        {
+            var cuentaActual = context.Cuentas.Find(account_number);
+            if (cuentaActual != null)
+            {
+                cuentaActual.Balance = cuentaActual.InitialBalance + cuenta.amount;
+                await context.SaveChangesAsync();
+            }
+
         }
     }
 

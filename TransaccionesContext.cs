@@ -9,8 +9,6 @@ namespace transaccionesBancarias
     {
         public DbSet<Cuenta> Cuentas {  get; set; }
         public TransaccionesContext(DbContextOptions options) :base(options) { }
-
-       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             List<Cuenta> cuentaInit = new List<Cuenta>();
@@ -21,8 +19,9 @@ namespace transaccionesBancarias
                 cuenta.ToTable("Cuenta");
                 cuenta.HasKey(p => p.AccountNumber);
                 cuenta.Property(p => p.AccountNumber).HasColumnName("account_number");
-                cuenta.Property(p => p.OwnerName).IsRequired().HasMaxLength(150).HasColumnName("owner_name").IsRequired();
-                cuenta.Property(p => p.InitialBalance).IsRequired().HasColumnName("initial_balance").IsRequired();
+                cuenta.Property(p => p.OwnerName).IsRequired().HasMaxLength(150).HasColumnName("owner_name");
+                cuenta.Property(p => p.InitialBalance).IsRequired().HasColumnName("initial_balance");
+                cuenta.Property(p => p.Balance).HasColumnName("balance");
                 cuenta.HasData(cuentaInit);
             });
         }
