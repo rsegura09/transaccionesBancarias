@@ -52,9 +52,16 @@ namespace transaccionesBancarias.Migrations
                         new
                         {
                             AccountNumber = 1,
-                            Balance = 0,
-                            InitialBalance = 1000,
+                            Balance = 2000,
+                            InitialBalance = 2000,
                             OwnerName = "Richard"
+                        },
+                        new
+                        {
+                            AccountNumber = 2,
+                            Balance = 1000,
+                            InitialBalance = 1000,
+                            OwnerName = "Jefferson"
                         });
                 });
 #pragma warning restore 612, 618

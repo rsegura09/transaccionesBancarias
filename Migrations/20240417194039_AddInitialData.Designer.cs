@@ -11,8 +11,8 @@ using transaccionesBancarias;
 namespace transaccionesBancarias.Migrations
 {
     [DbContext(typeof(TransaccionesContext))]
-    [Migration("20240416181834_AddColumnBalance2")]
-    partial class AddColumnBalance2
+    [Migration("20240417194039_AddInitialData")]
+    partial class AddInitialData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,9 +55,16 @@ namespace transaccionesBancarias.Migrations
                         new
                         {
                             AccountNumber = 1,
-                            Balance = 0,
-                            InitialBalance = 1000,
+                            Balance = 2000,
+                            InitialBalance = 2000,
                             OwnerName = "Richard"
+                        },
+                        new
+                        {
+                            AccountNumber = 2,
+                            Balance = 1000,
+                            InitialBalance = 1000,
+                            OwnerName = "Jefferson"
                         });
                 });
 #pragma warning restore 612, 618

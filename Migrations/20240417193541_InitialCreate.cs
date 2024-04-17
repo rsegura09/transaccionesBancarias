@@ -14,20 +14,16 @@ namespace transaccionesBancarias.Migrations
                 name: "Cuenta",
                 columns: table => new
                 {
-                    cuenta_id = table.Column<int>(type: "int", nullable: false)
+                    account_number = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     owner_name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    initial_balance = table.Column<int>(type: "int", nullable: false)
+                    initial_balance = table.Column<int>(type: "int", nullable: false),
+                    balance = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cuenta", x => x.cuenta_id);
+                    table.PrimaryKey("PK_Cuenta", x => x.account_number);
                 });
-
-            migrationBuilder.InsertData(
-                table: "Cuenta",
-                columns: new[] { "cuenta_id", "initial_balance", "owner_name" },
-                values: new object[] { 1, 1000, "Richard" });
         }
 
         /// <inheritdoc />

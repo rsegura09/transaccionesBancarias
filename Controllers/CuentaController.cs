@@ -15,26 +15,33 @@ namespace transaccionesBancarias.Controllers
             this.cuentaService = cuentaService;
         }
 
-        [HttpGet]
+        [HttpGet] //Obtiene todas las cuentas registradas
         public IActionResult Get()
         {
             return Ok(cuentaService.Get());
         }
 
-        [HttpPost]
+        [HttpPost] //Crea una nueva cuenta
         public IActionResult Post([FromBody] Cuenta cuenta)
         {
             cuentaService.Save(cuenta);
             return Ok();
         }
 
-        [HttpPut("{account_number}/deposit")]
+        [HttpPost("{account_number}/deposit")] //Deposita una cantidad en una cuenta
         public IActionResult Deposit(int account_number, [FromBody] CuentaAmount cuenta)
         {
             cuentaService.UpdateBalance(account_number, cuenta);
             return Ok();
         }
-        
+
+        [HttpPost("transfer")] //Realiza una transferencia entre cuentas
+        public IActionResult Transfer([FromBody] TransferCuenta transferencia)
+        {
+            cuentaService.ToTransfer(transferencia);
+            return Ok();
+        }
+
 
     }
 

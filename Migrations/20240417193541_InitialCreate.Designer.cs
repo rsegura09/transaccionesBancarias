@@ -11,7 +11,7 @@ using transaccionesBancarias;
 namespace transaccionesBancarias.Migrations
 {
     [DbContext(typeof(TransaccionesContext))]
-    [Migration("20240416000553_InitialCreate")]
+    [Migration("20240417193541_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -26,34 +26,30 @@ namespace transaccionesBancarias.Migrations
 
             modelBuilder.Entity("transaccionesBancarias.Models.Cuenta", b =>
                 {
-                    b.Property<int>("Cuenta_Id")
+                    b.Property<int>("AccountNumber")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("cuenta_id");
+                        .HasColumnName("account_number");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Cuenta_Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountNumber"));
 
-                    b.Property<int>("Initial_Balance")
+                    b.Property<int>("Balance")
+                        .HasColumnType("int")
+                        .HasColumnName("balance");
+
+                    b.Property<int>("InitialBalance")
                         .HasColumnType("int")
                         .HasColumnName("initial_balance");
 
-                    b.Property<string>("Owner_Name")
+                    b.Property<string>("OwnerName")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)")
                         .HasColumnName("owner_name");
 
-                    b.HasKey("Cuenta_Id");
+                    b.HasKey("AccountNumber");
 
                     b.ToTable("Cuenta", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Cuenta_Id = 1,
-                            Initial_Balance = 1000,
-                            Owner_Name = "Richard"
-                        });
                 });
 #pragma warning restore 612, 618
         }
