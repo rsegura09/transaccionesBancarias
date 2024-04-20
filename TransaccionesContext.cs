@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using transaccionesBancarias.Models;
+using transaccionesBancarias.Models.Entities;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace transaccionesBancarias

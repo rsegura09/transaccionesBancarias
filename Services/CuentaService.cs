@@ -1,5 +1,5 @@
-﻿using transaccionesBancarias.Models;
-using transaccionesBancarias.Models.Request;
+﻿using transaccionesBancarias.Models.DTO;
+using transaccionesBancarias.Models.Entities;
 
 namespace transaccionesBancarias.Services
 {
@@ -7,8 +7,8 @@ namespace transaccionesBancarias.Services
     {
         IEnumerable<Cuenta> Get();
         Task Save(Cuenta cuenta);
-        Task UpdateBalance(int account_number, CuentaAmount cuenta);
-        Task ToTransfer(TransferCuenta transferencia);
+        Task UpdateBalance(int account_number, CuentaAmountDTO cuenta);
+        Task ToTransfer(CuentaTransferDTO transferencia);
     }
     public class CuentaService : ICuentaService
     {
@@ -30,17 +30,17 @@ namespace transaccionesBancarias.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateBalance (int account_number, CuentaAmount cuenta)
+        public async Task UpdateBalance (int account_number, CuentaAmountDTO dto)
         {
             var cuentaActual = context.Cuentas.Find(account_number.ToString());
             if (cuentaActual != null)
             {
-                cuentaActual.Balance = cuentaActual.InitialBalance + cuenta.amount;
+                cuentaActual.Balance = cuentaActual.InitialBalance + dto.amount;
                 await context.SaveChangesAsync();
             }
         }
 
-        public async Task ToTransfer(TransferCuenta transferencia)
+        public async Task ToTransfer(CuentaTransferDTO transferencia)
         {
             var source_account = context.Cuentas.Find(transferencia.source_account_number);
             var destination_account = context.Cuentas.Find(transferencia.destination_account_number);

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using transaccionesBancarias.Models;
-using transaccionesBancarias.Models.Request;
+using transaccionesBancarias.Models.DTO;
+using transaccionesBancarias.Models.Entities;
 using transaccionesBancarias.Services;
 
 namespace transaccionesBancarias.Controllers
@@ -29,14 +29,14 @@ namespace transaccionesBancarias.Controllers
         }
 
         [HttpPost("{account_number}/deposit")] //Deposita una cantidad en una cuenta
-        public IActionResult Deposit(int account_number, [FromBody] CuentaAmount cuenta)
+        public IActionResult Deposit(int account_number, [FromBody] CuentaAmountDTO dto)
         {
-            cuentaService.UpdateBalance(account_number, cuenta);
+            cuentaService.UpdateBalance(account_number, dto);
             return Ok();
         }
 
         [HttpPost("transfer")] //Realiza una transferencia entre cuentas
-        public IActionResult Transfer([FromBody] TransferCuenta transferencia)
+        public IActionResult Transfer([FromBody] CuentaTransferDTO transferencia)
         {
             cuentaService.ToTransfer(transferencia);
             return Ok();
