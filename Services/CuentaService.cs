@@ -1,4 +1,7 @@
-﻿using transaccionesBancarias.Models.DTO;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using transaccionesBancarias.Models.DTO;
 using transaccionesBancarias.Models.Entities;
 
 namespace transaccionesBancarias.Services
@@ -9,6 +12,8 @@ namespace transaccionesBancarias.Services
         Task Save(Cuenta cuenta);
         Task UpdateBalance(int account_number, CuentaAmountDTO cuenta);
         Task ToTransfer(CuentaTransferDTO transferencia);
+        int ultimaCuentaCreada();
+        bool verificarCuenta(int account_number);
     }
     public class CuentaService : ICuentaService
     {
@@ -29,15 +34,30 @@ namespace transaccionesBancarias.Services
             context.Cuentas.Add(cuenta);
             await context.SaveChangesAsync();
         }
-
-        public async Task UpdateBalance (int account_number, CuentaAmountDTO dto)
+        public int ultimaCuentaCreada()
         {
-            var cuentaActual = context.Cuentas.Find(account_number.ToString());
+            var ultimaCuenta = context.Cuentas.OrderByDescending(p => p.AccountNumber).FirstOrDefault();
+            if (ultimaCuenta is not null)
+            {
+                return ultimaCuenta.AccountNumber;
+            }
+            else{ return 0; }
+        }
+
+        public async Task UpdateBalance (int account_number, CuentaAmountDTO cuenta)
+        {
+            var cuentaActual = context.Cuentas.Find(account_number);
+            cuentaActual.Balance = cuentaActual.InitialBalance + cuenta.amount;
+            await context.SaveChangesAsync();
+        }
+
+        public bool verificarCuenta(int account_number)
+        {
+            var cuentaActual = context.Cuentas.Find(account_number);
             if (cuentaActual != null)
             {
-                cuentaActual.Balance = cuentaActual.InitialBalance + dto.amount;
-                await context.SaveChangesAsync();
-            }
+                return true;
+            }else { return false; }
         }
 
         public async Task ToTransfer(CuentaTransferDTO transferencia)
@@ -45,17 +65,14 @@ namespace transaccionesBancarias.Services
             var source_account = context.Cuentas.Find(transferencia.source_account_number);
             var destination_account = context.Cuentas.Find(transferencia.destination_account_number);
 
-            if (source_account != null && destination_account != null)
+            if (source_account.Balance >= transferencia.amount)
             {
-                if (source_account.Balance >= transferencia.amount)
-                {
-                    source_account.Balance -= transferencia.amount;
-                    destination_account.Balance += transferencia.amount;
-                    await context.SaveChangesAsync();
-                }
+                source_account.Balance -= transferencia.amount;
+                destination_account.Balance += transferencia.amount;
+                await context.SaveChangesAsync();
             }
-
         }
+
     }
 
     
