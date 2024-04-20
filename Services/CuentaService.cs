@@ -65,17 +65,14 @@ namespace transaccionesBancarias.Services
             var source_account = context.Cuentas.Find(transferencia.source_account_number);
             var destination_account = context.Cuentas.Find(transferencia.destination_account_number);
 
-            if (source_account != null && destination_account != null)
+            if (source_account.Balance >= transferencia.amount)
             {
-                if (source_account.Balance >= transferencia.amount)
-                {
-                    source_account.Balance -= transferencia.amount;
-                    destination_account.Balance += transferencia.amount;
-                    await context.SaveChangesAsync();
-                }
+                source_account.Balance -= transferencia.amount;
+                destination_account.Balance += transferencia.amount;
+                await context.SaveChangesAsync();
             }
-
         }
+
     }
 
     

@@ -37,23 +37,38 @@ namespace transaccionesBancarias.Controllers
                 cuentaService.Save(cuenta);
                 return Ok($"Account Number: {cuentaService.ultimaCuentaCreada()}");
             }
-            
         }
 
- 
 
         [HttpPost("{account_number}/deposit")] //Deposita una cantidad en una cuenta
         public IActionResult Deposit(int account_number, [FromBody] CuentaAmountDTO dto)
         {
-            cuentaService.UpdateBalance(account_number, dto);
-            return Ok();
+            var cuentaExiste = cuentaService.verificarCuenta(account_number);
+            if (cuentaExiste == true)
+            {
+                cuentaService.UpdateBalance(account_number, dto);
+                return Ok();
+            }else { return NotFound(); }
         }
 
         [HttpPost("transfer")] //Realiza una transferencia entre cuentas
         public IActionResult Transfer([FromBody] CuentaTransferDTO transferencia)
         {
+            var cuentaOrigenExiste = cuentaService.verificarCuenta(transferencia.source_account_number);
+            var cuentaDestinoExiste = cuentaService.verificarCuenta(transferencia.destination_account_number);
+            
+            if (cuentaOrigenExiste == false)
+            {
+                return NotFound("\"source_account_number\" does not exist!");
+            }
+            if (cuentaDestinoExiste == false)
+            {
+                return NotFound("\"destination_account_number\" does not exist!");
+            }
+            
             cuentaService.ToTransfer(transferencia);
             return Ok();
+
         }
 
 
