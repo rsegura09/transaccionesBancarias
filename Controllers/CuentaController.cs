@@ -25,8 +25,10 @@ namespace transaccionesBancarias.Controllers
         public IActionResult Post([FromBody] Cuenta cuenta)
         {
             cuentaService.Save(cuenta);
-            return Ok();
+            return Ok(cuenta);
         }
+
+ 
 
         [HttpPost("{account_number}/deposit")] //Deposita una cantidad en una cuenta
         public IActionResult Deposit(int account_number, [FromBody] CuentaAmountDTO dto)
