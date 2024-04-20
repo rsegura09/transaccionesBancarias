@@ -13,6 +13,7 @@ namespace transaccionesBancarias.Services
         Task UpdateBalance(int account_number, CuentaAmountDTO cuenta);
         Task ToTransfer(CuentaTransferDTO transferencia);
         int ultimaCuentaCreada();
+        bool verificarCuenta(int account_number);
     }
     public class CuentaService : ICuentaService
     {
@@ -46,11 +47,17 @@ namespace transaccionesBancarias.Services
         public async Task UpdateBalance (int account_number, CuentaAmountDTO cuenta)
         {
             var cuentaActual = context.Cuentas.Find(account_number);
+            cuentaActual.Balance = cuentaActual.InitialBalance + cuenta.amount;
+            await context.SaveChangesAsync();
+        }
+
+        public bool verificarCuenta(int account_number)
+        {
+            var cuentaActual = context.Cuentas.Find(account_number);
             if (cuentaActual != null)
             {
-                cuentaActual.Balance = cuentaActual.InitialBalance + cuenta.amount;
-                await context.SaveChangesAsync();
-            }
+                return true;
+            }else { return false; }
         }
 
         public async Task ToTransfer(CuentaTransferDTO transferencia)
