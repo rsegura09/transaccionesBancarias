@@ -1,9 +1,9 @@
-﻿namespace transaccionesBancarias.Models
+﻿namespace transaccionesBancarias.Models.Entities
 {
     public class Cuenta
     {
         public int AccountNumber { get; set; }
-        public string? OwnerName { get; set;}
+        public string? OwnerName { get; set; }
         public int InitialBalance { get; set; }
         public int Balance { get; set; }
     }
