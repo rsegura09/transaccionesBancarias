@@ -18,14 +18,26 @@ namespace transaccionesBancarias.Controllers
         [HttpGet] //Obtiene todas las cuentas registradas
         public IActionResult Get()
         {
-            return Ok(cuentaService.Get());
+            if (cuentaService.Get().Any())
+            {
+                return Ok(cuentaService.Get());
+            }
+            else{ return NotFound(); }
         }
 
         [HttpPost] //Crea una nueva cuenta
         public IActionResult Post([FromBody] Cuenta cuenta)
         {
-            cuentaService.Save(cuenta);
-            return Ok(cuenta);
+            cuenta.OwnerName = cuenta.OwnerName.Trim();
+            if (cuenta.OwnerName == "")
+            {
+                return BadRequest();
+            } else
+            {
+                cuentaService.Save(cuenta);
+                return Ok($"Account Number: {cuentaService.ultimaCuentaCreada()}");
+            }
+            
         }
 
  

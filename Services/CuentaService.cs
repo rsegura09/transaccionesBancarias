@@ -1,4 +1,7 @@
-﻿using transaccionesBancarias.Models.DTO;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using transaccionesBancarias.Models.DTO;
 using transaccionesBancarias.Models.Entities;
 
 namespace transaccionesBancarias.Services
@@ -9,6 +12,7 @@ namespace transaccionesBancarias.Services
         Task Save(Cuenta cuenta);
         Task UpdateBalance(int account_number, CuentaAmountDTO cuenta);
         Task ToTransfer(CuentaTransferDTO transferencia);
+        int ultimaCuentaCreada();
     }
     public class CuentaService : ICuentaService
     {
@@ -29,13 +33,22 @@ namespace transaccionesBancarias.Services
             context.Cuentas.Add(cuenta);
             await context.SaveChangesAsync();
         }
-
-        public async Task UpdateBalance (int account_number, CuentaAmountDTO dto)
+        public int ultimaCuentaCreada()
         {
-            var cuentaActual = context.Cuentas.Find(account_number.ToString());
+            var ultimaCuenta = context.Cuentas.OrderByDescending(p => p.AccountNumber).FirstOrDefault();
+            if (ultimaCuenta is not null)
+            {
+                return ultimaCuenta.AccountNumber;
+            }
+            else{ return 0; }
+        }
+
+        public async Task UpdateBalance (int account_number, CuentaAmountDTO cuenta)
+        {
+            var cuentaActual = context.Cuentas.Find(account_number);
             if (cuentaActual != null)
             {
-                cuentaActual.Balance = cuentaActual.InitialBalance + dto.amount;
+                cuentaActual.Balance = cuentaActual.InitialBalance + cuenta.amount;
                 await context.SaveChangesAsync();
             }
         }
