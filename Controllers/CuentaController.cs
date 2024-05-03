@@ -9,7 +9,7 @@ namespace transaccionesBancarias.Controllers
     [Route("api/accounts")]
     public class CuentaController : ControllerBase
     {
-        ICuentaService cuentaService;
+        private readonly ICuentaService cuentaService;
         public CuentaController(ICuentaService cuentaService)
         {
             this.cuentaService = cuentaService;
